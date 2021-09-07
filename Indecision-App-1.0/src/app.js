@@ -1,25 +1,55 @@
-console.log("App . js is running")
-
 const appRoot = document.getElementById('app')
-var app = {
+
+const app = {
     title: 'Indecision App',
     subtitle: 'Put Your Life in the Hands of Computer',
-    options: [""]
+    options: []
 };
-var template = (
-     <div>
-        <h1>{app.title}</h1> 
-        {(app.subtitle) && <p>{app.subtitle}</p>}
-        <p>  {(app.options) && (app.options).length > 0 ? 'Here Are  Your Options':'No Options'} </p>
-     </div>
-);
 
-var templateTwo = (
-    <div>
-       <h1>Adhikar Shinde</h1>
-       <p>Age : 22</p>
-       <p>Location : India </p>
-    </div>
-);
+const onFormSubmit = (e) => {
+    e.preventDefault()
+   const option = e.target.elements.option.value
+   if(option){
+    app.options.push(option)
+    e.target.elements.option.value = ''
+    renderIndecsionApp()
+   }
+   else
+   console.log('Nothing') 
+}
 
-ReactDOM.render(template,appRoot)
+const removeAll = () => {
+    app.options = []
+    renderIndecsionApp()
+}
+
+const makeDcision = () => {
+    const randomNum = Math.floor(Math.random() * app.options.length)
+    const option = app.options[randomNum]
+    // renderIndecsionApp()
+    alert(option)
+}
+const renderIndecsionApp = () => {
+    const template = (
+        <div>
+           <h1>{app.title}</h1> 
+           {(app.subtitle) && <p>{app.subtitle}</p>}
+           <button disabled={!(app.options.length)} onClick= {removeAll}>Remove All</button>
+           <button disabled={!(app.options.length)} onClick={makeDcision}>What Should I Do??</button>
+           <p>  {(app.options) && (app.options).length > 0 ? 'Here Are  Your Options':'No Options'} </p>
+           <ol>
+           {
+            app.options.map((option) => <li key={option}>{option}</li>)
+           }
+           </ol>
+           <form onSubmit={onFormSubmit}>
+              <input type="text" name="option" />
+              <button>Add Options</button>
+           </form>
+        </div>
+   );
+   
+   ReactDOM.render(template,appRoot)
+}
+renderIndecsionApp()
+

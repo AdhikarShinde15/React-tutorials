@@ -1,53 +1,45 @@
 'use strict';
 
-console.log("App . js is running");
-
 var appRoot = document.getElementById('app');
-var app = {
-   title: 'Indecision App',
-   subtitle: 'Put Your Life in the Hands of Computer',
-   options: [""]
+var data = void 0;
+var buttonText = 'Show Details';
+
+var genDetail = function genDetail() {
+    if (buttonText === 'Show Details') {
+        data = 'Here are Your Details !!! Boy';
+        buttonText = 'Hide Details';
+        renderToggle();
+        return;
+    }
+    if (buttonText !== 'Show Details') {
+        data = null;
+        buttonText = 'Show Details';
+        renderToggle();
+        return;
+    }
 };
-var template = React.createElement(
-   'div',
-   null,
-   React.createElement(
-      'h1',
-      null,
-      app.title
-   ),
-   app.subtitle && React.createElement(
-      'p',
-      null,
-      app.subtitle
-   ),
-   React.createElement(
-      'p',
-      null,
-      '  ',
-      app.options && app.options.length > 0 ? 'Here Are  Your Options' : 'No Options',
-      ' '
-   )
-);
 
-var templateTwo = React.createElement(
-   'div',
-   null,
-   React.createElement(
-      'h1',
-      null,
-      'Adhikar Shinde'
-   ),
-   React.createElement(
-      'p',
-      null,
-      'Age : 22'
-   ),
-   React.createElement(
-      'p',
-      null,
-      'Location : India '
-   )
-);
+var renderToggle = function renderToggle() {
+    var template = React.createElement(
+        'div',
+        null,
+        React.createElement(
+            'h1',
+            null,
+            'Visibility Toggle'
+        ),
+        React.createElement(
+            'button',
+            { onClick: genDetail },
+            buttonText
+        ),
+        React.createElement(
+            'p',
+            { disabled: data },
+            data
+        )
+    );
 
-ReactDOM.render(template, appRoot);
+    ReactDOM.render(template, appRoot);
+};
+renderToggle();
