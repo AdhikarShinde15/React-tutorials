@@ -1,33 +1,20 @@
-const appRoot  = document.getElementById('app')
-let data 
-let buttonText = 'Show Details'
-
-const genDetail = () => {
-    if(buttonText === 'Show Details'){
-        data = 'Here are Your Details !!! Boy'
-        buttonText = 'Hide Details'
-        renderToggle()
-        return
-    }
-    if(buttonText !== 'Show Details'){
-        data = null
-        buttonText = 'Show Details'
-        renderToggle()
-        return
-    }
-    
+let visibility = false
+const toggleVisibility = () => {
+    visibility = !visibility
+    render()
 }
-
-
-const renderToggle = () => {
+const render = () => {
     const template = (
         <div>
           <h1>Visibility Toggle</h1>
-          <button onClick={genDetail}>{buttonText}</button>
-          <p disabled={data}>{data}</p>
+          <button onClick={toggleVisibility}>
+            {visibility ? 'Hide Details': 'Show Details' }
+          </button>
+          {visibility && <p>Here your Details ! !</p>}
         </div>
     );
-    
-    ReactDOM.render(template,appRoot)
+
+    ReactDOM.render(template,document.getElementById('app'));
 }
-renderToggle()
+
+render()
