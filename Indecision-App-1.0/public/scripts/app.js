@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -8,236 +8,75 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var IndecisionApp = function (_React$Component) {
-    _inherits(IndecisionApp, _React$Component);
+function FancyBorder(props) {
+  return React.createElement(
+    "div",
+    { className: 'FancyBorder FancyBorder-' + props.color },
+    props.children
+  );
+}
 
-    function IndecisionApp(props) {
-        _classCallCheck(this, IndecisionApp);
+function Dialog(props) {
+  return React.createElement(
+    FancyBorder,
+    { color: "blue" },
+    React.createElement(
+      "h1",
+      { className: "Dialog-title" },
+      props.title
+    ),
+    React.createElement(
+      "p",
+      { className: "Dialog-message" },
+      props.message
+    ),
+    props.children
+  );
+}
 
-        var _this = _possibleConstructorReturn(this, (IndecisionApp.__proto__ || Object.getPrototypeOf(IndecisionApp)).call(this, props));
+var SignUpDialog = function (_React$Component) {
+  _inherits(SignUpDialog, _React$Component);
 
-        _this.deleteAll = _this.deleteAll.bind(_this);
-        _this.handlePick = _this.handlePick.bind(_this);
-        _this.handleAddOption = _this.handleAddOption.bind(_this);
-        _this.handleDeleteOption = _this.handleDeleteOption.bind(_this);
-        _this.state = {
-            options: props.options
-        };
-        return _this;
+  function SignUpDialog(props) {
+    _classCallCheck(this, SignUpDialog);
+
+    var _this = _possibleConstructorReturn(this, (SignUpDialog.__proto__ || Object.getPrototypeOf(SignUpDialog)).call(this, props));
+
+    _this.handleChange = _this.handleChange.bind(_this);
+    _this.handleSignUp = _this.handleSignUp.bind(_this);
+    _this.state = { login: '' };
+    return _this;
+  }
+
+  _createClass(SignUpDialog, [{
+    key: "render",
+    value: function render() {
+      return React.createElement(
+        Dialog,
+        { title: "Mars Exploration Program",
+          message: "How should we refer to you?" },
+        React.createElement("input", { value: this.state.login,
+          onChange: this.handleChange }),
+        React.createElement(
+          "button",
+          { onClick: this.handleSignUp },
+          "Sign Me Up!"
+        )
+      );
     }
+  }, {
+    key: "handleChange",
+    value: function handleChange(e) {
+      this.setState({ login: e.target.value });
+    }
+  }, {
+    key: "handleSignUp",
+    value: function handleSignUp() {
+      alert("Welcome aboard, " + this.state.login + "!");
+    }
+  }]);
 
-    _createClass(IndecisionApp, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            try {
-                var json = localStorage.getItem('options');
-                var options = JSON.parse(json);
-                if (options) this.setState(function () {
-                    return { options: options };
-                });
-            } catch (e) {}
-        }
-    }, {
-        key: 'componentDidUpdate',
-        value: function componentDidUpdate(prevProps, prevState) {
-            if (prevState.options.length !== this.state.options.length) {
-                var json = JSON.stringify(this.state.options);
-                localStorage.setItem('options', json);
-            }
-        }
-    }, {
-        key: 'deleteAll',
-        value: function deleteAll() {
-            this.setState(function () {
-                return { options: [] };
-            });
-        }
-    }, {
-        key: 'handleDeleteOption',
-        value: function handleDeleteOption(option) {
-            this.setState(function (prevState) {
-                return {
-                    options: prevState.options.filter(function (opt) {
-                        return opt !== option;
-                    })
-                };
-            });
-        }
-    }, {
-        key: 'handlePick',
-        value: function handlePick() {
-            var randomNum = Math.floor(Math.random() * this.state.options.length);
-            alert(this.state.options[randomNum]);
-        }
-    }, {
-        key: 'handleAddOption',
-        value: function handleAddOption(opt) {
-            if (!opt) return 'Enter a Valid Value to add Item';else if (this.state.options.indexOf(opt) > -1) return 'Enter a Unique Value';
-            this.setState(function (prevState) {
-                return { options: prevState.options.concat(opt) };
-            });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-
-            var subtitle = 'Put Your Life In the Hands of Computer';
-
-            return React.createElement(
-                'div',
-                null,
-                React.createElement(Header, { subtitle: subtitle }),
-                React.createElement(Action, { hasOptions: this.state.options.length > 0,
-                    handlePick: this.handlePick
-                }),
-                React.createElement(Options, { options: this.state.options,
-                    deleteAll: this.deleteAll,
-                    handleDeleteOption: this.handleDeleteOption
-                }),
-                React.createElement(AddOption, { addOption: this.handleAddOption })
-            );
-        }
-    }]);
-
-    return IndecisionApp;
+  return SignUpDialog;
 }(React.Component);
 
-IndecisionApp.defaultProps = {
-    options: []
-};
-
-var Header = function Header(props) {
-    return React.createElement(
-        'div',
-        null,
-        React.createElement(
-            'h1',
-            null,
-            props.title
-        ),
-        props.subtitle && React.createElement(
-            'h2',
-            null,
-            props.subtitle
-        )
-    );
-};
-
-Header.defaultProps = {
-    title: 'Indecision'
-};
-
-var Action = function Action(props) {
-    return React.createElement(
-        'div',
-        null,
-        React.createElement(
-            'button',
-            { onClick: props.handlePick,
-                disabled: !props.hasOptions
-            },
-            'What Should I do?'
-        )
-    );
-};
-
-var Options = function Options(props) {
-    return React.createElement(
-        'div',
-        null,
-        React.createElement(
-            'button',
-            { onClick: props.deleteAll },
-            'Remove All'
-        ),
-        !props.options.length && React.createElement(
-            'p',
-            null,
-            ' No Options Available'
-        ),
-        props.options.map(function (option) {
-            return React.createElement(Option, {
-                key: option,
-                optionText: option,
-                handleDeleteOption: props.handleDeleteOption
-            });
-        })
-    );
-};
-
-var Option = function Option(props) {
-    return React.createElement(
-        'div',
-        null,
-        React.createElement(
-            'span',
-            null,
-            props.optionText
-        ),
-        React.createElement(
-            'button',
-            {
-                onClick: function onClick(e) {
-                    props.handleDeleteOption(props.optionText);
-                }
-            },
-            'Remove'
-        )
-    );
-};
-
-var AddOption = function (_React$Component2) {
-    _inherits(AddOption, _React$Component2);
-
-    function AddOption(props) {
-        _classCallCheck(this, AddOption);
-
-        var _this2 = _possibleConstructorReturn(this, (AddOption.__proto__ || Object.getPrototypeOf(AddOption)).call(this, props));
-
-        _this2.addOption = _this2.addOption.bind(_this2);
-        _this2.state = {
-            error: undefined
-        };
-        return _this2;
-    }
-
-    _createClass(AddOption, [{
-        key: 'addOption',
-        value: function addOption(e) {
-            e.preventDefault();
-            var opt = e.target.elements.option.value.trim();
-            var error = this.props.addOption(opt);
-            this.setState(function () {
-                return { error: error };
-            }); //same as return {error : error}
-            if (!error) e.target.elements.option.value = '';
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            return React.createElement(
-                'div',
-                null,
-                this.state.error && React.createElement(
-                    'p',
-                    null,
-                    this.state.error
-                ),
-                React.createElement(
-                    'form',
-                    { onSubmit: this.addOption },
-                    React.createElement('input', { type: 'text', name: 'option' }),
-                    React.createElement(
-                        'button',
-                        null,
-                        'Add Option'
-                    )
-                )
-            );
-        }
-    }]);
-
-    return AddOption;
-}(React.Component);
-
-ReactDOM.render(React.createElement(IndecisionApp, null), document.getElementById('app'));
+ReactDOM.render(React.createElement(SignUpDialog, null), document.getElementById('app'));
