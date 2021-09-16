@@ -3,10 +3,12 @@ import Options from "./Options"
 import Header from "./Header"
 import AddOption from "./AddOption"
 import Action from "./Action"
+import OptionModal from "./OptionModal"
 
 export default class IndecisionApp extends React.Component {
     state = {
-        options : []
+        options : [],
+        selectedOption : undefined
     }
     
     deleteAll = () => this.setState( () => ({ options : []}))
@@ -18,7 +20,7 @@ export default class IndecisionApp extends React.Component {
     }
     handlePick = () => {
      const randomNum = Math.floor(Math.random() * this.state.options.length)
-     alert(this.state.options[randomNum])
+      this.setState(()=> ({selectedOption:this.state.options[randomNum]}))
     }
     handleAddOption = (opt) => {
         if(!opt)
@@ -27,6 +29,9 @@ export default class IndecisionApp extends React.Component {
          return 'Enter a Unique Value' 
     this.setState ((prevState) => ({options : prevState.options.concat(opt)}) )
     }
+    handleClearSelectedOption = () => (
+        this.setState(() => ({selectedOption:undefined}))
+    );
     componentDidMount() {
         try {
             const json = localStorage.getItem('options');
@@ -37,7 +42,7 @@ export default class IndecisionApp extends React.Component {
 
         }
     }
-    componentDidUpdate(prevState) {
+    componentDidUpdate(prevProps,prevState) {
         if(prevState.options.length !== this.state.options.length) {
             const json = JSON.stringify(this.state.options)
             localStorage.setItem('options',json)
@@ -58,7 +63,12 @@ export default class IndecisionApp extends React.Component {
                      handleDeleteOption={this.handleDeleteOption}
             />
             <AddOption addOption={this.handleAddOption}/>
+            <OptionModal 
+              selectedOption={this.state.selectedOption}
+              handleClearSelectedOption={this.handleClearSelectedOption}
+            />
             </div> 
+            
         );
     }
 }
